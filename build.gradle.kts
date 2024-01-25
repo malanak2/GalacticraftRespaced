@@ -123,19 +123,15 @@ dependencies {
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.withType<ProcessResources>().configureEach {
-    val loadedProperties = HashMap<String, Any>()
-
-    for (entry in (Properties().apply {
+    val loadedProperties = Properties().apply {
         load(project.rootProject.file("gradle.properties").inputStream())
-    })) {
-        loadedProperties[entry.key as String] = entry.value
-    }
+    }.toMutableMap() as MutableMap<String, Any>
 
-    // inputs.properties(loadedProperties.toMutableMap())
+    inputs.properties(loadedProperties)
 
     filesMatching("META-INF/mods.toml") {
         expand(loadedProperties)
-        expand(hashMapOf("project" to project))
+        expand(mutableMapOf("project" to project))
     }
 }
 
