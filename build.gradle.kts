@@ -96,20 +96,22 @@ dependencies {
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    // compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
-    // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
+    // val jei_vesion: String by project
+    // compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    // compileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    // runtimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
+    // This maps to ./libs/coolmod-${minecraft_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
+    // val coolmod_version: String by project
+    // implementation("blank:coolmod-${minecraft_version}:${coolmod_version}")
 
     // Example mod dependency using a file as dependency
-    // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
+    // implementation(files("libs/coolmod-${minecraft_version}-${coolmod_version}.jar"))
 
     // Example project dependency using a sister or child project:
-    // implementation project(":myproject")
+    // implementation(project(":myproject"))
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
