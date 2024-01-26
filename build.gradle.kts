@@ -1,11 +1,16 @@
 import java.util.Properties
 
 plugins {
+    // The usual MDK dependencies
     id("java-library")
     id("eclipse")
     id("idea")
     id("maven-publish")
     id("net.neoforged.gradle.userdev") version "7.0.80"
+    // Kotlin Dependencies
+    kotlin("jvm") version "1.9.22"
+    // OPTIONAL:
+    // kotlin("plugin.serialization") version "1.9.22"
 }
 
 val mod_version: String by project
@@ -17,6 +22,10 @@ project.group = mod_group_id
 
 repositories {
     mavenLocal()
+    maven {
+        name = "Kotlin for Forge"
+        setUrl("https://thedarkcolour.github.io/KotlinForForge/")
+    }
 }
 
 base {
@@ -92,6 +101,9 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation("net.neoforged:neoforge:$neo_version")
+
+    // Dependency on KFF
+    implementation("thedarkcolour:kotlinforforge-neoforge:4.10.0")
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
