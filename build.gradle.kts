@@ -103,7 +103,8 @@ dependencies {
     implementation("net.neoforged:neoforge:$neo_version")
 
     // Dependency on KFF
-    implementation("thedarkcolour:kotlinforforge-neoforge:4.10.0")
+    val kff_version: String by project
+    implementation("thedarkcolour:kotlinforforge-neoforge:$kff_version")
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
