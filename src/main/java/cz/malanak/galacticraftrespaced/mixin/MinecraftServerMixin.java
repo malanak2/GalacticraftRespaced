@@ -1,6 +1,6 @@
-package com.example.examplemod.mixin;
+package cz.malanak.galacticraftrespaced.mixin;
 
-import com.example.examplemod.ExampleMod;
+import cz.malanak.galacticraftrespaced.GalacticraftRespaced;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +15,6 @@ public class MinecraftServerMixin {
     // Code here will be executed after a level was loaded.
     // This can also be done via Event, which should be used, but this
     // is an example mixin
-    ExampleMod.Companion.getLOGGER().debug("Hello from an Example Mixin");
+    GalacticraftRespaced.Companion.getLOGGER().debug("Hello from an Example Mixin");
   }
 }

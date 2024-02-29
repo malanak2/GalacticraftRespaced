@@ -1,4 +1,4 @@
-package com.example.examplemod
+package cz.malanak.galacticraftrespaced
 
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -12,7 +12,7 @@ import java.util.stream.Collectors
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
-@EventBusSubscriber(modid = ExampleMod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = GalacticraftRespaced.MODID, bus = EventBusSubscriber.Bus.MOD)
 object Config {
     private val BUILDER = ModConfigSpec.Builder()
 

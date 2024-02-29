@@ -1,20 +1,21 @@
-package com.example.examplemod
+package cz.malanak.galacticraftrespaced
 
 import com.mojang.logging.LogUtils
+import cz.malanak.galacticraftrespaced.blocks.ModBlocks
+import cz.malanak.galacticraftrespaced.items.ModItems.Companion.EXAMPLE_ITEM
+import cz.malanak.galacticraftrespaced.items.ModItems.Companion.ITEMS
 import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.language.LanguageInfo
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.DataGenerator
+import net.minecraft.data.PackOutput
 import net.minecraft.network.chat.Component
-import net.minecraft.world.food.FoodProperties
-import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters
 import net.minecraft.world.item.CreativeModeTabs
 import net.minecraft.world.item.Item
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.material.MapColor
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
@@ -25,61 +26,57 @@ import net.neoforged.fml.config.ModConfig
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.common.data.LanguageProvider
+import net.neoforged.neoforge.data.event.GatherDataEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
-import net.neoforged.neoforge.registries.DeferredBlock
+import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.MOD_ID
 import net.neoforged.neoforge.registries.DeferredHolder
-import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
 
+
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(ExampleMod.MODID)
-class ExampleMod(modEventBus: IEventBus) {
+@Mod(GalacticraftRespaced.MODID)
+class GalacticraftRespaced(modEventBus: IEventBus) {
     companion object {
         // Define mod id in a common place for everything to reference
-        const val MODID = "examplemod"
+        const val MODID = "galacticraftrespaced"
 
         // Directly reference a slf4j logger
         val LOGGER = LogUtils.getLogger()
 
         // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
-        val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(MODID)
+
+
+
 
         // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
-        val ITEMS: DeferredRegister.Items = DeferredRegister.createItems(MODID)
+
 
         // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
         val CREATIVE_MODE_TABS: DeferredRegister<CreativeModeTab> =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID)
 
         // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
-        val EXAMPLE_BLOCK: DeferredBlock<Block> = BLOCKS.registerSimpleBlock(
-            "example_block",
-            BlockBehaviour.Properties.of().mapColor(MapColor.STONE)
-        )
+
 
         // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
-        val EXAMPLE_BLOCK_ITEM: DeferredItem<BlockItem> = ITEMS.registerSimpleBlockItem("example_block", EXAMPLE_BLOCK)
+
 
         // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
-        val EXAMPLE_ITEM: DeferredItem<Item> = ITEMS.registerSimpleItem(
-            "example_item", Item.Properties().food(
-                FoodProperties.Builder()
-                    .alwaysEat().nutrition(1).saturationMod(2f).build()
-            )
-        )
+
 
         // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
-        val EXAMPLE_TAB: DeferredHolder<CreativeModeTab, CreativeModeTab> =
-            CREATIVE_MODE_TABS.register("example_tab") { ->
-                CreativeModeTab.builder()
-                    .title(Component.translatable("itemGroup.$MODID")) //The language key for the title of your CreativeModeTab
-                    .withTabsBefore(CreativeModeTabs.COMBAT)
-                    .icon { EXAMPLE_ITEM.get().defaultInstance }
-                    .displayItems { _: ItemDisplayParameters?, output: CreativeModeTab.Output ->
-                        output.accept(EXAMPLE_ITEM.get()) // Add the example item to the tab. For your own tabs, this method is preferred over the event
-                    }.build()
-            }
+        val EXAMPLE_TAB_BUILDER = CreativeModeTab.builder()
+                .title(Component.translatable("itemGroup.$MODID")) //The language key for the title of your CreativeModeTab
+                .withTabsBefore(CreativeModeTabs.COMBAT)
+                .icon { EXAMPLE_ITEM.get().defaultInstance }
+                .displayItems { _: ItemDisplayParameters?, output: CreativeModeTab.Output ->
+                    output.accept(EXAMPLE_ITEM.get()) // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                    output.accept(ModBlocks.EXAMPLE_BLOCK_ITEM.get())
+                };
+        val EXAMPLE_TAB: DeferredHolder<CreativeModeTab, CreativeModeTab> = CREATIVE_MODE_TABS.register("example_tab") { -> EXAMPLE_TAB_BUILDER.build() }
+
     }
 
     // Register the commonSetup method for modloading
@@ -99,12 +96,14 @@ class ExampleMod(modEventBus: IEventBus) {
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     init {
         modEventBus.addListener(this::commonSetup)
-        BLOCKS.register(modEventBus)
+        ModBlocks.BLOCKS.register(modEventBus)
         ITEMS.register(modEventBus)
         CREATIVE_MODE_TABS.register(modEventBus)
         NeoForge.EVENT_BUS.register(this)
-        modEventBus.addListener(this::addCreative)
+        // modEventBus.addListener(this::addCreative)
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC)
+
+        modEventBus.addListener(DataGen::onGatherData)
     }
 
     private fun commonSetup(event: FMLCommonSetupEvent) {
@@ -128,7 +127,7 @@ class ExampleMod(modEventBus: IEventBus) {
 
     // Add the example block item to the building blocks tab
     private fun addCreative(event: BuildCreativeModeTabContentsEvent) {
-        if (event.tabKey === CreativeModeTabs.BUILDING_BLOCKS) event.accept(EXAMPLE_BLOCK_ITEM)
+        // if (event.tabKey === CreativeModeTabs.BUILDING_BLOCKS) event.accept(EXAMPLE_BLOCK_ITEM)
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -137,6 +136,8 @@ class ExampleMod(modEventBus: IEventBus) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting")
     }
+
+
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
@@ -148,4 +149,6 @@ class ExampleMod(modEventBus: IEventBus) {
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().user.name)
         }
     }
+
+
 }

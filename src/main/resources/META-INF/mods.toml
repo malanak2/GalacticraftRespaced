@@ -43,7 +43,7 @@ authors="${mod_authors}" #optional
 description='''${mod_description}'''
 
 [[mixins]]
-config="examplemod.mixins.json"
+config="galacticraftrespaced.mixins.json"
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.${mod_id}]] #optional
