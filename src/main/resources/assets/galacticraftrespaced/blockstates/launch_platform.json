@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "formed=false": {"model": "galacticraftrespaced:block/launchpadblock1"},
+    "formed=true,level=1": {"model":  "galacticraftrespaced:block/launchpadblock1"},
+    "formed=true,level=2": {"model":  "galacticraftrespaced:block/launchpadblock2"},
+    "formed=true,level=3": {"model":  "galacticraftrespaced:block/launchpadblock3"}
+  }
+}

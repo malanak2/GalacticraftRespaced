@@ -56,44 +56,18 @@ class GalacticraftRespaced(modEventBus: IEventBus) {
         // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
         val CREATIVE_MODE_TABS: DeferredRegister<CreativeModeTab> =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID)
-
-        // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
-
-
-        // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
-
-
-        // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
-
-
-        // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
-        val EXAMPLE_TAB_BUILDER = CreativeModeTab.builder()
-                .title(Component.translatable("itemGroup.$MODID")) //The language key for the title of your CreativeModeTab
+        val TAB_BUILDER = CreativeModeTab.builder()
+                .title(Component.translatable("itemGroup.$MODID"))
                 .withTabsBefore(CreativeModeTabs.COMBAT)
                 .icon { EXAMPLE_ITEM.get().defaultInstance }
                 .displayItems { _: ItemDisplayParameters?, output: CreativeModeTab.Output ->
-                    output.accept(EXAMPLE_ITEM.get()) // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                    output.accept(EXAMPLE_ITEM.get())
                     output.accept(ModBlocks.EXAMPLE_BLOCK_ITEM.get())
                 };
-        val EXAMPLE_TAB: DeferredHolder<CreativeModeTab, CreativeModeTab> = CREATIVE_MODE_TABS.register("example_tab") { -> EXAMPLE_TAB_BUILDER.build() }
+        val ITEM_TAB: DeferredHolder<CreativeModeTab, CreativeModeTab> = CREATIVE_MODE_TABS.register("galacticraftrespaced_tab") { ->TAB_BUILDER.build() }
 
     }
 
-    // Register the commonSetup method for modloading
-
-    // Register the Deferred Register to the mod event bus so blocks get registered
-    // Register the Deferred Register to the mod event bus so items get registered
-    // Register the Deferred Register to the mod event bus so tabs get registered
-
-    // Register ourselves for server and other game events we are interested in.
-    // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-    // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
-
-    // Register the item to a creative tab
-
-    // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     init {
         modEventBus.addListener(this::commonSetup)
         ModBlocks.BLOCKS.register(modEventBus)
