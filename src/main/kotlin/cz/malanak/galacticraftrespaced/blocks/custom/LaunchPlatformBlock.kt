@@ -65,11 +65,6 @@ class LaunchPlatformBlock(props: Properties) : Block(props)  {
     }
 
     override fun onBlockStateChange(level: LevelReader?, pos: BlockPos?, oldState: BlockState?, newState: BlockState?) {
-        if (level?.isClientSide == true)
-        {
-            GalacticraftRespaced.LOGGER.info("Blockstate changed!");
-        }
-
         super.onBlockStateChange(level, pos, oldState, newState)
     }
 
