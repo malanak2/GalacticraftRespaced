@@ -26,6 +26,12 @@ repositories {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
+
+    mavenLocal()
+    maven {
+        name = "BlameJared Repository"
+        setUrl("https://maven.blamejared.com/")
+    }
 }
 
 base {
@@ -108,10 +114,15 @@ dependencies {
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // val jei_vesion: String by project
-    // compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    // compileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    // runtimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    val minecraft_version: String by project
+    val jei_version: String by project
+    val mekanism_version: String by project
+
+
+    compileOnly("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
+    compileOnly("mezz.jei:jei-$minecraft_version-forge-api:$jei_version")
+    runtimeOnly("mezz.jei:jei-$minecraft_version-forge:$jei_version")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${minecraft_version}-${coolmod_version}.jar
